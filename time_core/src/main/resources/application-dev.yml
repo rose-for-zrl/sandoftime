@@ -1,0 +1,51 @@
+# 开发环境配置
+
+server:
+  port: 8080
+  mysql:
+    ipPort: 127.0.0.1:3306
+  tomcat:
+    max-threads: 5 #tomcat最大线程数，默认为200
+
+spring:
+  thymeleaf:
+    cache: false # 关闭缓存，即时刷新
+  jpa:
+    database-platform: mysql
+    show-sql: true
+  datasource:     # 配置数据源相关 使用阿里巴巴的druid数据源
+    url: jdbc:mysql://127.0.0.1:3306/zrl?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+    username: zrl
+    password: zrl123!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait: -1
+    timeout: 0
+
+#配置mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:com/zrl/modules/api/mapper/*.xml
+  type-aliases-package: com.zrl.modules.api.entity
+  global-config:
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+
+################开发时候测试参数######################
+com:
+  didispace:
+    blog:
+      name: 程序员
+      title: demo
+      desc: ${com.didispace.blog.name}正在努力写${com.didispace.blog.title}
+      value: ${random.value}
+      number: ${random.int}
+      test1: ${random.int(10)}
+      test2: ${random.int[10,20]}

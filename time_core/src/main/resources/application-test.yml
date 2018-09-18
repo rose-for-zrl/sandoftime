@@ -1,0 +1,26 @@
+# 测试环境配置
+
+server:
+  port: 8088
+  mysql:
+    ipPort: 192.168.0.12:8066
+    tomcat:
+      max-threads: 10
+
+spring:
+  thymeleaf:
+    cache: true # 关闭缓存，即时刷新
+  jpa:
+    database-platform: mysql
+# 配置数据源相关 使用阿里巴巴的druid数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/zrl?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+    username: zrl
+    password: zrl123!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 1
+      min-idle: 1
+      max-active: 20
+      test-on-borrow: true
+      stat-view-servlet.allow: true

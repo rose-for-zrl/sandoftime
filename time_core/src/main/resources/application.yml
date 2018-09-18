@@ -1,0 +1,35 @@
+######################################################
+#
+# Server服务端
+#
+server:
+  error:
+    path: /error
+  session-timeout: 10 #session最大超时时间（分钟）,默认为30分钟
+  tomcat:
+    url-encoding: UTF-8
+  servlet:
+    context-path: /
+
+
+spring:
+  profiles:
+    active: dev
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html
+#    check-templete: true
+#    check-templete-location: true
+#    enabled: true
+#    excluded-view-names:
+#    templete-resolver-order:
+#    view-names:
+  mvc:
+    static-path-pattern: /**   # 这表示只有静态资源的访问路径为/resources/**时，才会处理请求
+
+
+#mybatis:
+#  configLocation: classpath:mybatis/mybatis-config.xml
