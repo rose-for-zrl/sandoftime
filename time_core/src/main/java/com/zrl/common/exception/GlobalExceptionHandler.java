@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    public static final String ERROR_VIEW = "common/error";
+    public static final String ERROR_VIEW = "/common/error";
 
     // 捕捉shiro 的异常
 //    @ResponseStatus(HttpStatus.UNAUTHORIZED)

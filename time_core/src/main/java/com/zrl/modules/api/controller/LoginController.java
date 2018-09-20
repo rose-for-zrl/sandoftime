@@ -1,6 +1,7 @@
 package com.zrl.modules.api.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.zrl.modules.api.dto.LoginRequest;
 import com.zrl.modules.api.dto.ResponseVo;
 import com.zrl.modules.api.entity.CustomerInfo;
 import com.zrl.modules.api.service.CustomerInfoService;
@@ -24,14 +25,14 @@ import java.util.Map;
  * @since 2018-09-14
  */
 @RestController
-@RequestMapping("/login/")
+@RequestMapping("/login")
 @Api(value = "/login" ,tags = "登陆/注册模块")
 public class LoginController {
 
     @Autowired
     private CustomerInfoService customerInfoService;
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = "",method = RequestMethod.GET)
     @ApiOperation(value = "首页")
     @ApiIgnore
     public ModelAndView index(){
@@ -41,18 +42,26 @@ public class LoginController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "doLogin",method = RequestMethod.POST)
+    @RequestMapping(value = "/doLogin",method = RequestMethod.POST, produces="application/json;charset=UTF-8")
     @ApiOperation(value = "登陆")
-    public ResponseVo doLogin(@RequestParam("nickName") String nickName, @RequestParam("password") String password){
-        //TODO 验证密码是否正确
-        if(StringUtils.isEmpty(nickName) || StringUtils.isEmpty(password)){
+    public ResponseVo doLogin(@RequestBody LoginRequest loginRequest){
+        System.out.println("d-----------------------------");
+        //验证密码是否正确
+        if(StringUtils.isEmpty(loginRequest.getCode()) || StringUtils.isEmpty(loginRequest.getTrueCode())){
+            return ResponseVo.errorException("请输入验证码");
+        } else if (!loginRequest.getCode().toLowerCase().equals(loginRequest.getTrueCode().toLowerCase())) {
+            return ResponseVo.errorException("验证码错误");
+        }
+        if(StringUtils.isEmpty(loginRequest.getNickName()) || StringUtils.isEmpty(loginRequest.getPassword())){
             return ResponseVo.errorException("用户名和密码必填");
         }
-        List<CustomerInfo> customerInfos = customerInfoService.selectList(new EntityWrapper<CustomerInfo>().eq("nick_name", nickName));
-        if(!customerInfos.isEmpty() && customerInfos.get(0).getPassword().equals(password)){
-            return ResponseVo.ok("index");
+        List<CustomerInfo> customerInfos = customerInfoService.selectList(new EntityWrapper<CustomerInfo>().eq("nick_name", loginRequest.getNickName()));
+        if(!customerInfos.isEmpty() && customerInfos.get(0).getPassword().equals(loginRequest.getPassword())){
+            Map result = new HashMap<String, String>();
+            result.put("url", "/index");
+            return ResponseVo.ok(result);
         }else{
-            return ResponseVo.errorMsg("无效的用户名或密码错误");
+            return ResponseVo.errorMsg("无效的用户或密码错误");
         }
     }
 
